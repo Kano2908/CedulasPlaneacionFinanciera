@@ -1,6 +1,7 @@
 package GUI;
 
 import LogicaCedulas.ManoDeObra;
+import java.awt.BorderLayout;
 import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -12,14 +13,18 @@ public class JPManoObra extends javax.swing.JPanel {
     ManoDeObra manoDeObra = new ManoDeObra();
     
     private double[] produccionMensual;
+    private double[] totalUsomateriales;
+    
     private int mesActual = 0;
     private String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
     private double tiempoTrabajar;
     private double tarifaHora;
+    private double[] totalManoObra;
     
-    public JPManoObra(double[] produccionMensual) {
+    public JPManoObra(double[] produccionMensual, double[] totalUsoMateriales) {
         initComponents();
         this.produccionMensual = produccionMensual;
+        this.totalUsomateriales = totalUsoMateriales;
         cargarTabla();
         mostrarMeses();
     }
@@ -187,7 +192,14 @@ public class JPManoObra extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBSiguienteCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSiguienteCedulaActionPerformed
+        JPDistribucionCFC distribucionCFC = new JPDistribucionCFC(this.produccionMensual, this.totalUsomateriales, this.totalManoObra);
+        distribucionCFC.setSize(804, 407);
+        distribucionCFC.setLocation(0, 0);
         
+        this.removeAll();
+        this.add(distribucionCFC,BorderLayout.CENTER);
+        this.revalidate();
+        this.repaint();
     }//GEN-LAST:event_jBSiguienteCedulaActionPerformed
 
     private void jBIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBIngresarActionPerformed
@@ -261,10 +273,10 @@ public class JPManoObra extends javax.swing.JPanel {
             manoDeObra.setTarifaHora(this.tarifaHora);
 
             double[] horasTrabajarCalculada = manoDeObra.calcularHorasTrabajar();
-            double[] importeCalculado = manoDeObra.calcularImporte();
+            this.totalManoObra = manoDeObra.calcularImporte();
 
             Object[] fila = {this.meses[this.mesActual], formatoDecimal.format(this.produccionMensual[this.mesActual]), this.tiempoTrabajar, horasTrabajarCalculada[this.mesActual],
-            formatoMoneda.format(this.tarifaHora), formatoMoneda.format(importeCalculado[this.mesActual])};
+            formatoMoneda.format(this.tarifaHora), formatoMoneda.format(this.totalManoObra[this.mesActual])};
 
             modeloTabla.addRow(fila);
             jTCuartaCedula.setModel(modeloTabla);
@@ -285,11 +297,11 @@ public class JPManoObra extends javax.swing.JPanel {
             manoDeObra.setTarifaHora(this.tarifaHora);
 
             double[] horasTrabajarCalculada = manoDeObra.calcularHorasTrabajar();
-            double[] importeCalculado = manoDeObra.calcularImporte();
+            this.totalManoObra = manoDeObra.calcularImporte();
 
             Object[] fila = {this.meses[this.mesActual], formatoDecimal.format(this.produccionMensual[this.mesActual]), this.tiempoTrabajar, 
                 formatoDecimal.format(horasTrabajarCalculada[this.mesActual]), formatoMoneda.format(this.tarifaHora), 
-                formatoMoneda.format(importeCalculado[this.mesActual])};
+                formatoMoneda.format(this.totalManoObra[this.mesActual])};
 
             modeloTabla.addRow(fila);
             jTCuartaCedula.setModel(modeloTabla);
@@ -312,6 +324,7 @@ public class JPManoObra extends javax.swing.JPanel {
         jLTotalHoras.setText(String.valueOf(formatoDecimal.format(totalHoras)));
         jLImporteTotal.setText(String.valueOf(formatoMoneda.format(importeTotal)));
 
+        jBIngresar.setEnabled(false);
         jBSiguienteCedula.setEnabled(true);
     }
 }

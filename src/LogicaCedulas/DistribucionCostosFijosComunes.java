@@ -2,18 +2,24 @@ package LogicaCedulas;
 
 public class DistribucionCostosFijosComunes {
     private final int mesesA = 12;
-    private double[] agua;
-    private double[] energiaElectrica;
-    private double[] serviciosComunicacion;
-    private double[] gastosGerenciales;
-    private double[] materialesSuministros;
-    private double[] rentas;
-    private double[] depreciaciones;
+    private double porcentajeProduccion;
+    private double porcentajeVentas;
+    private double porcentajeAdministracion;
+    private double agua;
+    private double energiaElectrica;
+    private double serviciosComunicacion;
+    private double gastosGerenciales;
+    private double materialesSuministros;
+    private double rentas;
+    private double depreciaciones;
 
     public DistribucionCostosFijosComunes() {
     }
 
-    public DistribucionCostosFijosComunes(double[] agua, double[] energiaElectrica, double[] serviciosComunicacion, double[] gastosGerenciales, double[] materialesSuministros, double[] rentas, double[] depreciaciones) {
+    public DistribucionCostosFijosComunes(double porcentajeProduccion, double porcentajeVentas, double porcentajeAdministracion, double agua, double energiaElectrica, double serviciosComunicacion, double gastosGerenciales, double materialesSuministros, double rentas, double depreciaciones) {
+        this.porcentajeProduccion = porcentajeProduccion;
+        this.porcentajeVentas = porcentajeVentas;
+        this.porcentajeAdministracion = porcentajeAdministracion;
         this.agua = agua;
         this.energiaElectrica = energiaElectrica;
         this.serviciosComunicacion = serviciosComunicacion;
@@ -23,40 +29,54 @@ public class DistribucionCostosFijosComunes {
         this.depreciaciones = depreciaciones;
     }
 
-    public void setAgua(double[] agua) {
+    public void setPorcentajeProduccion(double porcentajeProduccion) {
+        this.porcentajeProduccion = porcentajeProduccion;
+    }
+
+    public void setPorcentajeVentas(double porcentajeVentas) {
+        this.porcentajeVentas = porcentajeVentas;
+    }
+
+    public void setPorcentajeAdministracion(double porcentajeAdministracion) {
+        this.porcentajeAdministracion = porcentajeAdministracion;
+    }
+
+    public void setAgua(double agua) {
         this.agua = agua;
     }
 
-    public void setEnergiaElectrica(double[] energiaElectrica) {
+    public void setEnergiaElectrica(double energiaElectrica) {
         this.energiaElectrica = energiaElectrica;
     }
 
-    public void setServiciosComunicacion(double[] serviciosComunicacion) {
+    public void setServiciosComunicacion(double serviciosComunicacion) {
         this.serviciosComunicacion = serviciosComunicacion;
     }
 
-    public void setGastosGerenciales(double[] gastosGerenciales) {
+    public void setGastosGerenciales(double gastosGerenciales) {
         this.gastosGerenciales = gastosGerenciales;
     }
 
-    public void setMaterialesSuministros(double[] materialesSuministros) {
+    public void setMaterialesSuministros(double materialesSuministros) {
         this.materialesSuministros = materialesSuministros;
     }
 
-    public void setRentas(double[] rentas) {
+    public void setRentas(double rentas) {
         this.rentas = rentas;
     }
 
-    public void setDepreciaciones(double[] depreciaciones) {
+    public void setDepreciaciones(double depreciaciones) {
         this.depreciaciones = depreciaciones;
     }
+
+    
 
     public double[] calularCostoTotalCostosIndirectos() {
         double[] costoTotalCostosIndirectos = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            costoTotalCostosIndirectos[i] = this.agua[i] + this.energiaElectrica[i] + this.serviciosComunicacion[i]
-                    + this.gastosGerenciales[i] + this.materialesSuministros[i] + this.rentas[i] + this.depreciaciones[i];
+            costoTotalCostosIndirectos[i] = this.agua + this.energiaElectrica + this.serviciosComunicacion
+                    + this.gastosGerenciales + this.materialesSuministros + this.rentas + this.depreciaciones;
         }
         return costoTotalCostosIndirectos;
     }
@@ -72,75 +92,75 @@ public class DistribucionCostosFijosComunes {
     }
 
     // Calular Costos Fijos Comunes de Produccion
-    public double[] calcularAguaProduccion(double porcentaje) {
+    public double[] calcularAguaProduccion() {
         double[] aguaProduccion = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            aguaProduccion[i] = this.agua[i] * porcentaje;
+            aguaProduccion[i] = this.agua * this.porcentajeProduccion;
         }
         return aguaProduccion;
     }
 
-    public double[] calcularEnergiaElectricaProduccion(double porcentaje) {
+    public double[] calcularEnergiaElectricaProduccion() {
         double[] energiaElectricaProduccion = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            energiaElectricaProduccion[i] = this.energiaElectrica[i] * porcentaje;
+            energiaElectricaProduccion[i] = this.energiaElectrica * this.porcentajeProduccion;
         }
         return energiaElectricaProduccion;
     }
 
-    public double[] calcularServiciosComunicacionProduccion(double porcentaje) {
+    public double[] calcularServiciosComunicacionProduccion() {
         double[] serviciosComunicacionProduccion = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            serviciosComunicacionProduccion[i] = this.serviciosComunicacion[i] * porcentaje;
+            serviciosComunicacionProduccion[i] = this.serviciosComunicacion * this.porcentajeProduccion;
         }
         return serviciosComunicacionProduccion;
     }
 
-    public double[] calcularGastosGerencialesProduccion(double porcentaje) {
+    public double[] calcularGastosGerencialesProduccion() {
         double[] gastosGerencialesProduccion = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            gastosGerencialesProduccion[i] = this.gastosGerenciales[i] * porcentaje;
+            gastosGerencialesProduccion[i] = this.gastosGerenciales * this.porcentajeProduccion;
         }
         return gastosGerencialesProduccion;
     }
 
-    public double[] calcularMaterialesSuministrosProduccion(double porcentaje) {
+    public double[] calcularMaterialesSuministrosProduccion() {
         double[] materialesSuministrosProduccion = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            materialesSuministrosProduccion[i] = this.materialesSuministros[i] * porcentaje;
+            materialesSuministrosProduccion[i] = this.materialesSuministros * this.porcentajeProduccion;
         }
         return materialesSuministrosProduccion;
     }
 
-    public double[] calcularRentasProduccion(double porcentaje) {
+    public double[] calcularRentasProduccion() {
         double[] rentasProduccion = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            rentasProduccion[i] = this.rentas[i] * porcentaje;
+            rentasProduccion[i] = this.rentas * this.porcentajeProduccion;
         }
         return rentasProduccion;
     }
 
-    public double[] calcularDepreciacionesProduccion(double porcentaje) {
+    public double[] calcularDepreciacionesProduccion() {
         double[] depreciacionesProduccion = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            depreciacionesProduccion[i] = this.depreciaciones[i] * porcentaje;
+            depreciacionesProduccion[i] = this.depreciaciones * this.porcentajeProduccion;
         }
         return depreciacionesProduccion;
     }
 
-    public double[] calcularCostoFijosComunesProduccion(double porcentaje) {
+    public double[] calcularCostoFijosComunesProduccion() {
         double[] costoTotalCostosIndirectos = calularCostoTotalCostosIndirectos();
         double[] costoTotalProduccion = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            costoTotalProduccion[i] = costoTotalCostosIndirectos[i] * porcentaje;
+            costoTotalProduccion[i] = costoTotalCostosIndirectos[i] * this.porcentajeProduccion;
         }
         return costoTotalProduccion;
     }
@@ -150,7 +170,7 @@ public class DistribucionCostosFijosComunes {
         double[] aguaVentas = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            aguaVentas[i] = this.agua[i] * porcentaje;
+            aguaVentas[i] = this.agua * porcentaje;
         }
         return aguaVentas;
     }
@@ -159,7 +179,7 @@ public class DistribucionCostosFijosComunes {
         double[] energiaElectricaVentas = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            energiaElectricaVentas[i] = this.energiaElectrica[i] * porcentaje;
+            energiaElectricaVentas[i] = this.energiaElectrica * porcentaje;
         }
         return energiaElectricaVentas;
     }
@@ -168,7 +188,7 @@ public class DistribucionCostosFijosComunes {
         double[] serviciosComunicacionVentas = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            serviciosComunicacionVentas[i] = this.serviciosComunicacion[i] * porcentaje;
+            serviciosComunicacionVentas[i] = this.serviciosComunicacion * porcentaje;
         }
         return serviciosComunicacionVentas;
     }
@@ -177,7 +197,7 @@ public class DistribucionCostosFijosComunes {
         double[] gastosGerencialesVentas = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            gastosGerencialesVentas[i] = this.gastosGerenciales[i] * porcentaje;
+            gastosGerencialesVentas[i] = this.gastosGerenciales * porcentaje;
         }
         return gastosGerencialesVentas;
     }
@@ -186,7 +206,7 @@ public class DistribucionCostosFijosComunes {
         double[] materialesSuministrosVentas = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            materialesSuministrosVentas[i] = this.materialesSuministros[i] * porcentaje;
+            materialesSuministrosVentas[i] = this.materialesSuministros * porcentaje;
         }
         return materialesSuministrosVentas;
     }
@@ -195,7 +215,7 @@ public class DistribucionCostosFijosComunes {
         double[] rentasVentas = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            rentasVentas[i] = this.rentas[i] * porcentaje;
+            rentasVentas[i] = this.rentas * porcentaje;
         }
         return rentasVentas;
     }
@@ -204,7 +224,7 @@ public class DistribucionCostosFijosComunes {
         double[] depreciacionesVentas = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            depreciacionesVentas[i] = this.depreciaciones[i] * porcentaje;
+            depreciacionesVentas[i] = this.depreciaciones * porcentaje;
         }
         return depreciacionesVentas;
     }
@@ -224,7 +244,7 @@ public class DistribucionCostosFijosComunes {
         double[] aguaAdministracion = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            aguaAdministracion[i] = this.agua[i] * porcentaje;
+            aguaAdministracion[i] = this.agua * porcentaje;
         }
         return aguaAdministracion;
     }
@@ -233,7 +253,7 @@ public class DistribucionCostosFijosComunes {
         double[] energiaElectricaAdministracion = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            energiaElectricaAdministracion[i] = this.energiaElectrica[i] * porcentaje;
+            energiaElectricaAdministracion[i] = this.energiaElectrica * porcentaje;
         }
         return energiaElectricaAdministracion;
     }
@@ -242,7 +262,7 @@ public class DistribucionCostosFijosComunes {
         double[] serviciosComunicacionAdministracion = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            serviciosComunicacionAdministracion[i] = this.serviciosComunicacion[i] * porcentaje;
+            serviciosComunicacionAdministracion[i] = this.serviciosComunicacion * porcentaje;
         }
         return serviciosComunicacionAdministracion;
     }
@@ -251,7 +271,7 @@ public class DistribucionCostosFijosComunes {
         double[] gastosGerencialesAdministracion = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            gastosGerencialesAdministracion[i] = this.gastosGerenciales[i] * porcentaje;
+            gastosGerencialesAdministracion[i] = this.gastosGerenciales * porcentaje;
         }
         return gastosGerencialesAdministracion;
     }
@@ -260,7 +280,7 @@ public class DistribucionCostosFijosComunes {
         double[] materialesSuministrosAdministracion = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            materialesSuministrosAdministracion[i] = this.materialesSuministros[i] * porcentaje;
+            materialesSuministrosAdministracion[i] = this.materialesSuministros * porcentaje;
         }
         return materialesSuministrosAdministracion;
     }
@@ -269,7 +289,7 @@ public class DistribucionCostosFijosComunes {
         double[] rentasAdministracion = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            rentasAdministracion[i] = this.rentas[i] * porcentaje;
+            rentasAdministracion[i] = this.rentas * porcentaje;
         }
         return rentasAdministracion;
     }
@@ -278,7 +298,7 @@ public class DistribucionCostosFijosComunes {
         double[] depreciacionesAdministracion = new double[this.mesesA];
 
         for (int i = 0; i < this.mesesA; i++) {
-            depreciacionesAdministracion[i] = this.depreciaciones[i] * porcentaje;
+            depreciacionesAdministracion[i] = this.depreciaciones * porcentaje;
         }
         return depreciacionesAdministracion;
     }

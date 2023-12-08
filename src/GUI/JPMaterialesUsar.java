@@ -155,7 +155,7 @@ public class JPMaterialesUsar extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBSiguienteCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSiguienteCedulaActionPerformed
-        JPManoObra manoObra = new JPManoObra(this.produccionMensual);
+        JPManoObra manoObra = new JPManoObra(this.produccionMensual, this.totalUsoMaterial);
         manoObra.setSize(804, 407);
         manoObra.setLocation(0, 0);
         
