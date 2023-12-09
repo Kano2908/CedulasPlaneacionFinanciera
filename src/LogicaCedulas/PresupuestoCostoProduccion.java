@@ -17,32 +17,16 @@ public class PresupuestoCostoProduccion {
         this.produccionRequerida = produccionRequerida;
     }
 
-    public double[] getCostoTotalUsoMaterial() {
-        return costoTotalUsoMaterial;
-    }
-
     public void setCostoTotalUsoMaterial(double[] costoTotalUsoMaterial) {
         this.costoTotalUsoMaterial = costoTotalUsoMaterial;
-    }
-
-    public double[] getCostoTotalManoObra() {
-        return costoTotalManoObra;
     }
 
     public void setCostoTotalManoObra(double[] costoTotalManoObra) {
         this.costoTotalManoObra = costoTotalManoObra;
     }
 
-    public double[] getCostoTotalCostosIndirectosFabricacion() {
-        return costoTotalCostosIndirectosFabricacion;
-    }
-
     public void setCostoTotalCostosIndirectosFabricacion(double[] costoTotalCostosIndirectosFabricacion) {
         this.costoTotalCostosIndirectosFabricacion = costoTotalCostosIndirectosFabricacion;
-    }
-    
-    public double[] getProduccionRequerida() {
-        return produccionRequerida;
     }
 
     public void setProduccionRequerida(double[] produccionRequerida) {
@@ -58,6 +42,16 @@ public class PresupuestoCostoProduccion {
         return costoTotalProduccionCalculado;
     }
     
+    public double calcularTotalCostoTotalProduccion(){
+        double[] costoTotalProduccionCalculado = calcularCostoTotalProduccion();
+        double totalCTP = 0;
+        
+        for (double produccionC : costoTotalProduccionCalculado) {
+            totalCTP += produccionC;
+        }
+        return totalCTP;
+    }
+    
     public double[] calcularCostoUnitarioProduccion(){
         double[] costoTotalProduccionCalculado = calcularCostoTotalProduccion();
         double[] costoUnitarioproduccionCalculado = new double[this.mesesA];
@@ -66,5 +60,15 @@ public class PresupuestoCostoProduccion {
             costoUnitarioproduccionCalculado[i] = costoTotalProduccionCalculado[i] / this.produccionRequerida[i];
         }
         return costoUnitarioproduccionCalculado;
+    }
+    
+    public double calcularTotalCostoUnitarioProduccion(){
+        double[] costoUnitarioproduccionCalculado = calcularCostoUnitarioProduccion();
+        double totalCUP = 0;
+        
+        for (double produccionU : costoUnitarioproduccionCalculado) {
+            totalCUP += produccionU;
+        }
+        return totalCUP;
     }
 }
