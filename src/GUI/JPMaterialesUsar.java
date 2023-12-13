@@ -7,22 +7,30 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class JPMaterialesUsar extends javax.swing.JPanel {
+
     // Instancias de clases
     DefaultTableModel modeloTabla = new DefaultTableModel();
     DecimalFormat formatoMoneda = new DecimalFormat("$#,##0.00");
     DecimalFormat formatoDecimal = new DecimalFormat("#,##0");
     MaterialesUsar materialesU = new MaterialesUsar();
-    
+
+    private int[] ventas;
+    private double[] produccionMensual;
+    private double[] inventarioFinalE;
+    private double[] inventarioInicialE;
+
     private int mesActual = 0;
     private String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
-    private double[] produccionMensual;
     private int metrosPiezas;
     private double[] materialesUsar;
     private double costoUnitario;
     private double[] totalUsoMaterial;
-    
-    public JPMaterialesUsar(double[] produccionMensual, int metrosPiezas, double costoUnitario) {
+
+    public JPMaterialesUsar(int[] ventas, double[] inventarioFinalE, double[] inventarioInicialE, double[] produccionMensual, int metrosPiezas, double costoUnitario) {
         initComponents();
+        this.ventas = ventas;
+        this.inventarioFinalE = inventarioFinalE;
+        this.inventarioInicialE = inventarioInicialE;
         this.produccionMensual = produccionMensual;
         this.metrosPiezas = metrosPiezas;
         this.costoUnitario = costoUnitario;
@@ -43,6 +51,8 @@ public class JPMaterialesUsar extends javax.swing.JPanel {
         jLTotalUsoM = new javax.swing.JLabel();
         jBCalcularTotales = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jTTerceraCedula.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -93,16 +103,12 @@ public class JPMaterialesUsar extends javax.swing.JPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(jLabel1)
-                        .addGap(138, 138, 138))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBSiguienteCedula)
+                            .addComponent(jBCalcularTotales)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLusoMaterialCalculado)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -110,23 +116,24 @@ public class JPMaterialesUsar extends javax.swing.JPanel {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLusoMaterialCalculado1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLMaterialesU, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jBCalcularTotales))
-                        .addGap(18, 18, 18)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                                .addComponent(jLMaterialesU, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(25, 25, 25))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jBSiguienteCedula))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(12, 12, 12)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -137,9 +144,12 @@ public class JPMaterialesUsar extends javax.swing.JPanel {
                             .addComponent(jLTotalUsoM, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(78, 78, 78)
                         .addComponent(jBCalcularTotales)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBSiguienteCedula)
-                        .addGap(26, 26, 26))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)))
+                .addComponent(jBSiguienteCedula)
+                .addGap(26, 26, 26))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -155,12 +165,12 @@ public class JPMaterialesUsar extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBSiguienteCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSiguienteCedulaActionPerformed
-        JPManoObra manoObra = new JPManoObra(this.produccionMensual, this.totalUsoMaterial);
-        manoObra.setSize(804, 407);
+        JPManoObra manoObra = new JPManoObra(this.ventas, this.inventarioFinalE, this.inventarioInicialE, this.produccionMensual, this.totalUsoMaterial);
+        manoObra.setSize(1056, 407);
         manoObra.setLocation(0, 0);
-        
+
         this.removeAll();
-        this.add(manoObra,BorderLayout.CENTER);
+        this.add(manoObra, BorderLayout.CENTER);
         this.revalidate();
         this.repaint();
     }//GEN-LAST:event_jBSiguienteCedulaActionPerformed
@@ -169,7 +179,7 @@ public class JPMaterialesUsar extends javax.swing.JPanel {
         jBCalcularTotales.setEnabled(false);
         for (int i = 0; i < 12; i++) {
             cargarCalculos();
-            if(this.mesActual == 12){
+            if (this.mesActual == 12) {
                 calcularTotales();
             }
         }
@@ -190,7 +200,7 @@ public class JPMaterialesUsar extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void cargarTabla() {
-        String titulos[] = {"Periodo", "Produccion","Metros/Piezas", "Materiales Usar", "Costo Unitario", "Total del Uso de Material"};
+        String titulos[] = {"Periodo", "Produccion", "Metros/Piezas", "Materiales Usar", "Costo Unitario", "Total del Uso de Material"};
         modeloTabla.setColumnIdentifiers(titulos);
         jTTerceraCedula.setModel(modeloTabla);
     }
@@ -205,21 +215,21 @@ public class JPMaterialesUsar extends javax.swing.JPanel {
             this.totalUsoMaterial = materialesU.calcularUsoMaterial();
 
             Object[] fila = {this.meses[this.mesActual], formatoDecimal.format(this.produccionMensual[this.mesActual]), this.metrosPiezas,
-            formatoDecimal.format(this.materialesUsar[this.mesActual]), formatoMoneda.format(this.costoUnitario), 
-            formatoMoneda.format(this.totalUsoMaterial[this.mesActual])};
+                formatoDecimal.format(this.materialesUsar[this.mesActual]), formatoMoneda.format(this.costoUnitario),
+                formatoMoneda.format(this.totalUsoMaterial[this.mesActual])};
 
             modeloTabla.addRow(fila);
             jTTerceraCedula.setModel(modeloTabla);
-           
+
             this.mesActual++;
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Ingresa datos validos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    private void calcularTotales(){
+
+    private void calcularTotales() {
         JOptionPane.showMessageDialog(null, "Calculando totales", "Info", JOptionPane.INFORMATION_MESSAGE);
-        
+
         double totalMaterialesU = materialesU.calcularTotalMaterialesUsar();
         double costoTotal = materialesU.calcularTotalUsoMaterial();
 

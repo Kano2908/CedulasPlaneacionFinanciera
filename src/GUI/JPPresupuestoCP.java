@@ -1,29 +1,37 @@
 package GUI;
 
 import LogicaCedulas.PresupuestoCostoProduccion;
+import java.awt.BorderLayout;
 import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class JPPresupuestoCP extends javax.swing.JPanel {
+
     DefaultTableModel modeloTabla = new DefaultTableModel();
     DecimalFormat formatoMoneda = new DecimalFormat("$#,##0.00");
     DecimalFormat formatoDecimal = new DecimalFormat("#,##0");
     PresupuestoCostoProduccion presuCP = new PresupuestoCostoProduccion();
-    
+
+    private int[] ventas;
+    private double[] inventarioFinalE;
+    private double[] inventarioInicialE;
     private double[] produccionMensual;
     private double[] costoTotalUsoMateriales;
     private double[] costoTotalMDO;
     private double[] totalCostoIndirectosVentas;
     private double[] totalCostoIndirectosAdministracion;
     private double[] costoTotalCIF;
-    
+
     private int mesActual = 0;
     private String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
-    private double[] costoTotalproduccion;
+    private double[] costoTotalProduccion;
     private double[] costoUnitarioProduccion;
-    
-    public JPPresupuestoCP(double[] produccionMensual, double[] costoTotalUsoMateriales, double[] costoTotalMDO, double[] totalCostoIndirectosVentas, double[] totalCostoIndirectosAdministracion, double[] costoTotalCIF) {
+
+    public JPPresupuestoCP(int[] ventas, double[] inventarioFinalE, double[] inventarioInicialE, double[] produccionMensual, double[] costoTotalUsoMateriales, double[] costoTotalMDO, double[] totalCostoIndirectosVentas, double[] totalCostoIndirectosAdministracion, double[] costoTotalCIF) {
+        this.ventas = ventas;
+        this.inventarioFinalE = inventarioFinalE;
+        this.inventarioInicialE = inventarioInicialE;
         this.produccionMensual = produccionMensual;
         this.costoTotalUsoMateriales = costoTotalUsoMateriales;
         this.costoTotalMDO = costoTotalMDO;
@@ -33,7 +41,7 @@ public class JPPresupuestoCP extends javax.swing.JPanel {
         initComponents();
         cargarTabla();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -52,6 +60,8 @@ public class JPPresupuestoCP extends javax.swing.JPanel {
 
         jRadioButton1.setText("jRadioButton1");
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
         jTSeptimaCedula.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -60,7 +70,6 @@ public class JPPresupuestoCP extends javax.swing.JPanel {
 
             }
         ));
-        jTSeptimaCedula.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jScrollPane1.setViewportView(jTSeptimaCedula);
 
         jBIngresar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -114,15 +123,15 @@ public class JPPresupuestoCP extends javax.swing.JPanel {
                             .addComponent(jLCostoTP, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLCostoUP, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 136, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jBIngresar)
@@ -137,9 +146,9 @@ public class JPPresupuestoCP extends javax.swing.JPanel {
                     .addComponent(jLCostoUP, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(78, 78, 78))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addGap(47, 47, 47)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -155,14 +164,24 @@ public class JPPresupuestoCP extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBSiguienteCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSiguienteCedulaActionPerformed
-        // TODO add your handling code here:
+        JPCostoVentas costoVentas = new JPCostoVentas(this.ventas, this.inventarioFinalE, this.inventarioInicialE, 
+                this.totalCostoIndirectosVentas, this.totalCostoIndirectosAdministracion,
+                this.costoTotalProduccion, this.costoUnitarioProduccion);
+        
+        costoVentas.setSize(1056, 407);
+        costoVentas.setLocation(0, 0);
+
+        this.removeAll();
+        this.add(costoVentas, BorderLayout.CENTER);
+        this.revalidate();
+        this.repaint();
     }//GEN-LAST:event_jBSiguienteCedulaActionPerformed
 
     private void jBIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBIngresarActionPerformed
         jBIngresar.setEnabled(false);
         for (int i = 0; i < 12; i++) {
             primeraCarga();
-            if(this.mesActual == 12){
+            if (this.mesActual == 12) {
                 calcularTotales();
             }
         }
@@ -184,46 +203,45 @@ public class JPPresupuestoCP extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void cargarTabla() {
-        String titulos[] = {"Periodo", "CT Usu de Materiales", "CT Mano de Obra","CT Costos IF", "CT de Produccion", "Produccion Requerida", "CostoU de Produccion"};
+        String titulos[] = {"Periodo", "CT Usu de Materiales", "CT Mano de Obra", "CT Costos IF", "CT de Produccion", "Produccion Requerida", "CostoU de Produccion"};
         modeloTabla.setColumnIdentifiers(titulos);
         jTSeptimaCedula.setModel(modeloTabla);
     }
-    
-    private void primeraCarga(){
+
+    private void primeraCarga() {
         try {
             presuCP.setCostoTotalUsoMaterial(this.costoTotalUsoMateriales);
             presuCP.setCostoTotalManoObra(this.costoTotalMDO);
             presuCP.setCostoTotalCostosIndirectosFabricacion(this.costoTotalCIF);
             presuCP.setProduccionRequerida(this.produccionMensual);
 
-            this.costoTotalproduccion = presuCP.calcularCostoTotalProduccion();
+            this.costoTotalProduccion = presuCP.calcularCostoTotalProduccion();
             this.costoUnitarioProduccion = presuCP.calcularCostoUnitarioProduccion();
 
-            Object[] fila = {this.meses[this.mesActual], formatoMoneda.format(this.costoTotalUsoMateriales[this.mesActual]), 
-            formatoMoneda.format(this.costoTotalMDO[this.mesActual]), formatoMoneda.format(this.costoTotalCIF[this.mesActual]),
-            formatoMoneda.format(this.costoTotalproduccion[this.mesActual]), formatoDecimal.format(this.produccionMensual[this.mesActual]),
-            formatoDecimal.format(this.costoUnitarioProduccion[this.mesActual])};
+            Object[] fila = {this.meses[this.mesActual], formatoMoneda.format(this.costoTotalUsoMateriales[this.mesActual]),
+                formatoMoneda.format(this.costoTotalMDO[this.mesActual]), formatoMoneda.format(this.costoTotalCIF[this.mesActual]),
+                formatoMoneda.format(this.costoTotalProduccion[this.mesActual]), formatoDecimal.format(this.produccionMensual[this.mesActual]),
+                formatoDecimal.format(this.costoUnitarioProduccion[this.mesActual])};
 
             modeloTabla.addRow(fila);
             jTSeptimaCedula.setModel(modeloTabla);
-            
+
             this.mesActual++;
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Ingresa datos validos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    private void calcularTotales(){
+
+    private void calcularTotales() {
         JOptionPane.showMessageDialog(null, "Calculando totales", "Info", JOptionPane.INFORMATION_MESSAGE);
-        
+
         double totalCTP = presuCP.calcularTotalCostoTotalProduccion();
         double totalCUP = presuCP.calcularTotalCostoUnitarioProduccion();
 
         // Muestreo de valores
         jLCostoTP.setText(String.valueOf(formatoMoneda.format(totalCTP)));
         jLCostoUP.setText(String.valueOf(formatoDecimal.format(totalCUP)));
-        
-        
+
         jBSiguienteCedula.setEnabled(true);
     }
 }

@@ -7,28 +7,35 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class JPCostosIndirectosF extends javax.swing.JPanel {
+
     DefaultTableModel modeloTabla = new DefaultTableModel();
     DecimalFormat formatoMoneda = new DecimalFormat("$#,##0.00");
     DecimalFormat formatoDecimal = new DecimalFormat("#,##0");
     CostosIndirectosFabricacion costosIF = new CostosIndirectosFabricacion();
-    
+
+    private int[] ventas;
+    private double[] inventarioFinalE;
+    private double[] inventarioInicialE;
     private double[] produccionMensual;
     private double[] costoTotalUsoMateriales;
     private double[] costoTotalMDO;
     private double[] totalCostoIndirectosProduccion;
     private double[] totalCostoIndirectosVentas;
     private double[] totalCostoIndirectosAdministracion;
-    
+
     private int mesActual = 0;
     private String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
-    private double gastosSupervicion;
+    private double[] gastosSupervicion = new double[12];
     private double depreciaciones;
-    private double[] totalCostosFijosP;
+    private double[] totalCostosFijosP = new double[12];
     private double tasaGIF;
-    private double[] costosVariablesP;
-    private double[] costoTotalCIF;
-    
-    public JPCostosIndirectosF(double[] produccionMensual, double[] costoTotalUsoMateriales, double[] costoTotalMDO, double[] totalCostoIndirectosProduccion, double[] totalCostoIndirectosVentas, double[] totalCostoIndirectosAdministracion) {
+    private double[] costosVariablesP = new double[12];
+    private double[] costoTotalCIF = new double[12];
+
+    public JPCostosIndirectosF(int[] ventas, double[] inventarioFinalE, double[] inventarioInicialE, double[] produccionMensual, double[] costoTotalUsoMateriales, double[] costoTotalMDO, double[] totalCostoIndirectosProduccion, double[] totalCostoIndirectosVentas, double[] totalCostoIndirectosAdministracion) {
+        this.ventas = ventas;
+        this.inventarioFinalE = inventarioFinalE;
+        this.inventarioInicialE = inventarioInicialE;
         this.produccionMensual = produccionMensual;
         this.costoTotalUsoMateriales = costoTotalUsoMateriales;
         this.costoTotalMDO = costoTotalMDO;
@@ -38,7 +45,7 @@ public class JPCostosIndirectosF extends javax.swing.JPanel {
         initComponents();
         cargarTabla();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -74,6 +81,8 @@ public class JPCostosIndirectosF extends javax.swing.JPanel {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
         jTSextaCedula.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -85,7 +94,6 @@ public class JPCostosIndirectosF extends javax.swing.JPanel {
 
             }
         ));
-        jTSextaCedula.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jScrollPane1.setViewportView(jTSextaCedula);
 
         jBIngresar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -130,6 +138,7 @@ public class JPCostosIndirectosF extends javax.swing.JPanel {
 
         jLTotalCostosF.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
+        jLTotalCostosVar.setBackground(new java.awt.Color(255, 255, 255));
         jLTotalCostosVar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
         jLCostoTotalCIF.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -138,8 +147,8 @@ public class JPCostosIndirectosF extends javax.swing.JPanel {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -153,68 +162,66 @@ public class JPCostosIndirectosF extends javax.swing.JPanel {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLTotalCostosF, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLTotalCostosVar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLCostoTotalCIF, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 19, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTFTasaGIF, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLdepreciacionesCFC)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTFDepreciacion, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLgastosSupervicion)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTFGastosS, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                            .addComponent(jLCostoTotalCIF, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel10)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jTFTasaGIF, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLdepreciacionesCFC)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jTFDepreciacion, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLgastosSupervicion)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jTFGastosS, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(jLabel1)
-                .addGap(41, 41, 41)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLgastosSupervicion)
-                    .addComponent(jTFGastosS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLdepreciacionesCFC)
-                    .addComponent(jTFDepreciacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(jTFTasaGIF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jBIngresar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jBSiguienteCedula)
-                .addGap(35, 35, 35)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLcalcularCostoVarablesProduccion1)
+                        .addGap(37, 37, 37)
+                        .addComponent(jLabel1)
+                        .addGap(41, 41, 41)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLgastosSupervicion)
+                            .addComponent(jTFGastosS, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLcalcularCostoVarablesProduccion))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLdepreciacionesCFC)
+                            .addComponent(jTFDepreciacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(jTFTasaGIF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jBIngresar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jBSiguienteCedula)
+                        .addGap(35, 35, 35)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLcalcularCostoVarablesProduccion1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLcalcularCostoVarablesProduccion))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLTotalCostosF, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLTotalCostosVar, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLTotalCostosF, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLTotalCostosVar, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(46, 46, 46)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
                     .addComponent(jLCostoTotalCIF, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(35, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -230,26 +237,25 @@ public class JPCostosIndirectosF extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBSiguienteCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSiguienteCedulaActionPerformed
-        JPPresupuestoCP presuCP = new JPPresupuestoCP(produccionMensual, costoTotalUsoMateriales, costoTotalMDO, totalCostoIndirectosVentas, totalCostoIndirectosAdministracion, costoTotalCIF);
-        
-        presuCP.setSize(804, 407);
+        JPPresupuestoCP presuCP = new JPPresupuestoCP(this.ventas, this.inventarioFinalE, this.inventarioInicialE, this.produccionMensual,
+                this.costoTotalUsoMateriales, this.costoTotalMDO, this.totalCostoIndirectosVentas, this.totalCostoIndirectosAdministracion, this.costoTotalCIF);
+
+        presuCP.setSize(1056, 407);
         presuCP.setLocation(0, 0);
-        
+
         this.removeAll();
-        this.add(presuCP,BorderLayout.CENTER);
+        this.add(presuCP, BorderLayout.CENTER);
         this.revalidate();
         this.repaint();
     }//GEN-LAST:event_jBSiguienteCedulaActionPerformed
 
     private void jBIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBIngresarActionPerformed
-        if(this.mesActual == 0){
+        if (this.mesActual == 0) {
             primeraCarga();
         } else {
-            for (int i = 0; i < 11; i++) {
-                segundaCarga();
-                if(this.mesActual == 12){
-                    calcularTotales();
-                }
+            segundaCarga();
+            if (this.mesActual == 12) {
+                calcularTotales();
             }
         }
     }//GEN-LAST:event_jBIngresarActionPerformed
@@ -276,14 +282,24 @@ public class JPCostosIndirectosF extends javax.swing.JPanel {
     private javax.swing.JTextField jTFTasaGIF;
     private javax.swing.JTable jTSextaCedula;
     // End of variables declaration//GEN-END:variables
-    
+
     private void cargarTabla() {
-        String titulos[] = {"Periodo", "CFC Produccion", "Gastos S","Depreciacion", "Total Costos Fijos", "Produccion Requerida", "TasaGIF", "Total Costo V", "Costo Total CIP"};
+        String titulos[] = {"Periodo", "CFC Produccion", "Gastos S", "Depreciacion", "Total Costos Fijos", "Produccion Requerida", "TasaGIF", "Total Costo V", "Costo Total CIP"};
         modeloTabla.setColumnIdentifiers(titulos);
         jTSextaCedula.setModel(modeloTabla);
     }
+
+    private void buttomsPrimeraCarga() {
+        jTFDepreciacion.setEditable(false);
+        jTFDepreciacion.setEnabled(false);
+        jTFDepreciacion.setFocusable(false);
+
+        jTFTasaGIF.setEditable(false);
+        jTFTasaGIF.setEnabled(false);
+        jTFTasaGIF.setFocusable(false);
+    }
     
-    private void buttomsPrimeraCarga(){
+    private void buttomsFinal() {
         jTFGastosS.setEditable(false);
         jTFGastosS.setEnabled(false);
         jTFGastosS.setFocusable(false);
@@ -291,25 +307,25 @@ public class JPCostosIndirectosF extends javax.swing.JPanel {
         jTFDepreciacion.setEditable(false);
         jTFDepreciacion.setEnabled(false);
         jTFDepreciacion.setFocusable(false);
-        
+
         jTFTasaGIF.setEditable(false);
         jTFTasaGIF.setEnabled(false);
         jTFTasaGIF.setFocusable(false);
     }
-    
+
     private void limpiarCampos() {
         jTFGastosS.setText("");
         jTFDepreciacion.setText("");
         jTFTasaGIF.setText("");
     }
-    
-    private void primeraCarga(){
+
+    private void primeraCarga() {
         try {
-            this.gastosSupervicion = Double.parseDouble(jTFGastosS.getText());
+            this.gastosSupervicion[this.mesActual] = Double.parseDouble(jTFGastosS.getText());
             this.depreciaciones = Double.parseDouble(jTFDepreciacion.getText());
             this.tasaGIF = Double.parseDouble(jTFTasaGIF.getText());
-            
-            costosIF.setTotalCostoIndirectosProduccion(totalCostoIndirectosProduccion);
+
+            costosIF.setTotalCostoIndirectosProduccion(this.totalCostoIndirectosProduccion);
             costosIF.setGastosSupervicion(this.gastosSupervicion);
             costosIF.setDepreciaciones(this.depreciaciones);
             costosIF.setUnidadesProducir(this.produccionMensual);
@@ -319,25 +335,27 @@ public class JPCostosIndirectosF extends javax.swing.JPanel {
             this.costosVariablesP = costosIF.calcularCostoVarablesProduccion();
             this.costoTotalCIF = costosIF.calcularCostoTotalIndirectosProduccion();
 
-            Object[] fila = {this.meses[this.mesActual], formatoMoneda.format(this.totalCostoIndirectosProduccion[this.mesActual]), 
-            formatoMoneda.format(this.gastosSupervicion), formatoMoneda.format(this.depreciaciones),
-            formatoMoneda.format(this.totalCostosFijosP[this.mesActual]), formatoDecimal.format(this.produccionMensual[this.mesActual]),
-            this.tasaGIF, formatoMoneda.format(this.costosVariablesP[this.mesActual]), formatoMoneda.format(this.costoTotalCIF[this.mesActual])};
+            Object[] fila = {this.meses[this.mesActual], formatoMoneda.format(this.totalCostoIndirectosProduccion[this.mesActual]),
+                formatoMoneda.format(this.gastosSupervicion[this.mesActual]), formatoMoneda.format(this.depreciaciones),
+                formatoMoneda.format(this.totalCostosFijosP[this.mesActual]), formatoDecimal.format(this.produccionMensual[this.mesActual]),
+                this.tasaGIF, formatoMoneda.format(this.costosVariablesP[this.mesActual]), formatoMoneda.format(this.costoTotalCIF[this.mesActual])};
 
             modeloTabla.addRow(fila);
             jTSextaCedula.setModel(modeloTabla);
 
             limpiarCampos();
             buttomsPrimeraCarga();
-            
+
             this.mesActual++;
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Ingresa datos validos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    private void segundaCarga(){
+
+    private void segundaCarga() {
         try {
+            this.gastosSupervicion[this.mesActual] = Double.parseDouble(jTFGastosS.getText());
+
             costosIF.setTotalCostoIndirectosProduccion(totalCostoIndirectosProduccion);
             costosIF.setGastosSupervicion(this.gastosSupervicion);
             costosIF.setDepreciaciones(this.depreciaciones);
@@ -348,26 +366,26 @@ public class JPCostosIndirectosF extends javax.swing.JPanel {
             this.costosVariablesP = costosIF.calcularCostoVarablesProduccion();
             this.costoTotalCIF = costosIF.calcularCostoTotalIndirectosProduccion();
 
-            Object[] fila = {this.meses[this.mesActual], formatoMoneda.format(this.totalCostoIndirectosProduccion[this.mesActual]), 
-            formatoMoneda.format(this.gastosSupervicion), formatoMoneda.format(this.depreciaciones),
-            formatoMoneda.format(this.totalCostosFijosP[this.mesActual]), formatoDecimal.format(this.produccionMensual[this.mesActual]),
-            formatoDecimal.format(tasaGIF), formatoMoneda.format(this.costosVariablesP[this.mesActual]), formatoMoneda.format(this.costoTotalCIF[this.mesActual])};
+            Object[] fila = {this.meses[this.mesActual], formatoMoneda.format(this.totalCostoIndirectosProduccion[this.mesActual]),
+                formatoMoneda.format(this.gastosSupervicion[this.mesActual]), formatoMoneda.format(this.depreciaciones),
+                formatoMoneda.format(this.totalCostosFijosP[this.mesActual]), formatoDecimal.format(this.produccionMensual[this.mesActual]),
+                formatoDecimal.format(tasaGIF), formatoMoneda.format(this.costosVariablesP[this.mesActual]), formatoMoneda.format(this.costoTotalCIF[this.mesActual])};
 
             modeloTabla.addRow(fila);
             jTSextaCedula.setModel(modeloTabla);
 
             limpiarCampos();
             buttomsPrimeraCarga();
-            
+
             this.mesActual++;
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Ingresa datos validos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    private void calcularTotales(){
+
+    private void calcularTotales() {
         JOptionPane.showMessageDialog(null, "Calculando totales", "Info", JOptionPane.INFORMATION_MESSAGE);
-        
+
         double totalCFP = costosIF.calcularTotalCostoFijosProduccion();
         double totalCVP = costosIF.calcularTotalCostoVarablesProduccion();
         double totalCTCIF = costosIF.calcularTotalCostoTotalIndirectosProduccion();
@@ -376,7 +394,8 @@ public class JPCostosIndirectosF extends javax.swing.JPanel {
         jLTotalCostosF.setText(String.valueOf(formatoMoneda.format(totalCFP)));
         jLTotalCostosVar.setText(String.valueOf(formatoMoneda.format(totalCVP)));
         jLCostoTotalCIF.setText(String.valueOf(formatoMoneda.format(totalCTCIF)));
-        
+
+        buttomsFinal();
         jBIngresar.setEnabled(false);
         jBSiguienteCedula.setEnabled(true);
     }

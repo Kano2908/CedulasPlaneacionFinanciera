@@ -3,7 +3,9 @@ package GUI;
 import java.awt.BorderLayout;
 
 public class JFMenu extends javax.swing.JFrame {
-    JPDeterminacionDeProduccion determinacionProduccion =  null;
+
+    JPDeterminacionDeProduccion determinacionProduccion = null;
+
     public JFMenu() {
         initComponents();
         mostrarCedula();
@@ -26,7 +28,7 @@ public class JFMenu extends javax.swing.JFrame {
         jPContenido.setLayout(jPContenidoLayout);
         jPContenidoLayout.setHorizontalGroup(
             jPContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 804, Short.MAX_VALUE)
+            .addGap(0, 1056, Short.MAX_VALUE)
         );
         jPContenidoLayout.setVerticalGroup(
             jPContenidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -54,7 +56,7 @@ public class JFMenu extends javax.swing.JFrame {
         panelRound1Layout.setHorizontalGroup(
             panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelRound1Layout.createSequentialGroup()
-                .addGap(298, 298, 298)
+                .addGap(427, 427, 427)
                 .addComponent(jLLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -105,14 +107,14 @@ public class JFMenu extends javax.swing.JFrame {
     private javax.swing.JPanel jPContenido;
     private GUI.PanelRound panelRound1;
     // End of variables declaration//GEN-END:variables
-    
-    public void mostrarCedula(){
+
+    public void mostrarCedula() {
         determinacionProduccion = new JPDeterminacionDeProduccion();
-        determinacionProduccion.setSize(804, 407);
+        determinacionProduccion.setSize(1056, 407);
         determinacionProduccion.setLocation(0, 0);
-        
+
         jPContenido.removeAll();
-        jPContenido.add(determinacionProduccion,BorderLayout.CENTER);
+        jPContenido.add(determinacionProduccion, BorderLayout.CENTER);
         jPContenido.revalidate();
         jPContenido.repaint();
     }

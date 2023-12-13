@@ -11,15 +11,8 @@ public class DeterminacionDeProduccion {
     public DeterminacionDeProduccion() {
     }
 
-    public DeterminacionDeProduccion(double porcentaje, int[] ventas, int inventarioFinal, int inventarioInicial) {
-        this.porcentaje = porcentaje;
-        this.ventas = ventas;
-        this.inventarioFinal = inventarioFinal;
-        this.inventarioInicial = inventarioInicial;
-    }
-
     public void setPorcentaje(double porcentaje) {
-        this.porcentaje = porcentaje;
+        this.porcentaje = porcentaje / 100;
     }
 
     public void setVentas(int[] ventas) {
@@ -41,6 +34,33 @@ public class DeterminacionDeProduccion {
             totalVentas += venta;
         }
         return totalVentas;
+    }
+
+    public double[] extraerInventarioFinal() {
+        double[] inveFinalExtraido = new double[this.mesesA];
+
+        for (int i = 0; i < this.mesesA; i++) {
+            if (i == 0) {
+                inveFinalExtraido[i] = this.inventarioFinal;
+            } else {
+                inveFinalExtraido[i] = this.ventas[i - 1] * this.porcentaje;
+            }
+        }
+        return inveFinalExtraido;
+    }
+
+    public double[] extraerInventarioInicial() {
+        double[] inveFinalExtraido = extraerInventarioFinal();
+        double[] inveInicialExtraido = new double[this.mesesA];
+
+        for (int i = 0; i < this.mesesA; i++) {
+            if (i == 0) {
+                inveInicialExtraido[i] = this.inventarioInicial;
+            } else {
+                inveInicialExtraido[i] = inveFinalExtraido[i - 1];
+            }
+        }
+        return inveInicialExtraido;
     }
 
     public double[] calcularDeterminacionProduccion() {

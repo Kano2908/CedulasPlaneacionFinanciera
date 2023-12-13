@@ -7,23 +7,24 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class JPDeterminacionDeProduccion extends javax.swing.JPanel {
+
     // Instancias de clases
     DeterminacionDeProduccion determinacionProduccion = new DeterminacionDeProduccion();
     DefaultTableModel modeloTabla = new DefaultTableModel();
     DecimalFormat formatoDecimal = new DecimalFormat("#,##0");
     JPMaterialesComprar materialesComprar = null;
-    
+
     // Declaracion de variables y arreglos de esta cedula
     private int mesActual = 0;
     private String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
     private double porcentaje;
     private int[] ventas = new int[12];
     private double[] produccionMensual = new double[12];
-    
+    private double[] inventarioFinalE;
+    private double[] inventarioInicialE;
+
     public JPDeterminacionDeProduccion() {
         initComponents();
-        mostrarMeses();
-        buttomsSegundaCarga();
         cargarTabla();
     }
 
@@ -51,6 +52,8 @@ public class JPDeterminacionDeProduccion extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLMeses = new javax.swing.JLabel();
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jTPrimeraC.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -149,17 +152,17 @@ public class JPDeterminacionDeProduccion extends javax.swing.JPanel {
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTFVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(39, 39, 39)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel6)
@@ -183,16 +186,18 @@ public class JPDeterminacionDeProduccion extends javax.swing.JPanel {
                         .addGap(39, 39, 39)
                         .addComponent(jBIngresar)
                         .addGap(18, 18, 18)
-                        .addComponent(jBSiguienteCedula)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLVentaAnual, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jBSiguienteCedula))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(jLProduccionAnual, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel5)
+                    .addComponent(jLVentaAnual, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLProduccionAnual, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
@@ -209,28 +214,23 @@ public class JPDeterminacionDeProduccion extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBIngresarActionPerformed
-        if(this.mesActual == 0){
+        if (this.mesActual == 0) {
             primeraCarga();
-            mostrarMeses();
-        } else if(this.mesActual == 1){
+        } else {
             segundaCarga();
-            mostrarMeses();
-        } else{
-            terceraCarga();
-            //mostrarMeses();
             if (this.mesActual == 12) {
                 calcularTotales();
             }
-        } 
+        }
     }//GEN-LAST:event_jBIngresarActionPerformed
 
     private void jBSiguienteCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSiguienteCedulaActionPerformed
-        materialesComprar = new JPMaterialesComprar(this.produccionMensual);
-        materialesComprar.setSize(804, 407);
+        materialesComprar = new JPMaterialesComprar(this.ventas, this.inventarioFinalE, this.inventarioInicialE, this.produccionMensual);
+        materialesComprar.setSize(1056, 407);
         materialesComprar.setLocation(0, 0);
-        
+
         this.removeAll();
-        this.add(materialesComprar,BorderLayout.CENTER);
+        this.add(materialesComprar, BorderLayout.CENTER);
         this.revalidate();
         this.repaint();
     }//GEN-LAST:event_jBSiguienteCedulaActionPerformed
@@ -259,17 +259,13 @@ public class JPDeterminacionDeProduccion extends javax.swing.JPanel {
     private javax.swing.JTable jTPrimeraC;
     // End of variables declaration//GEN-END:variables
 
-    private void mostrarMeses(){
-        jLMeses.setText(String.valueOf(this.meses[this.mesActual]));
-    }
-    
     private void limpiarCampos() {
         jTFPorcentaje.setText("");
         jTFVentas.setText("");
         jTFInventarioFinal.setText("");
         jTFInventarioInicial.setText("");
     }
-    
+
     private void buttomsPrimeraCarga() {
         jTFInventarioFinal.setEditable(false);
         jTFInventarioFinal.setEnabled(false);
@@ -279,116 +275,90 @@ public class JPDeterminacionDeProduccion extends javax.swing.JPanel {
         jTFInventarioInicial.setEnabled(false);
         jTFInventarioInicial.setFocusable(false);
 
-        jTFPorcentaje.setEditable(true);
-        jTFPorcentaje.setEnabled(true);
-        jTFPorcentaje.setFocusable(true);
+        jTFPorcentaje.setEditable(false);
+        jTFPorcentaje.setEnabled(false);
+        jTFPorcentaje.setFocusable(false);
     }
     
-    private void buttomsSegundaCarga() {
+    private void buttomsFinal() {
+        jTFVentas.setEditable(false);
+        jTFVentas.setEnabled(false);
+        jTFVentas.setFocusable(false);
+        
+        jTFInventarioFinal.setEditable(false);
+        jTFInventarioFinal.setEnabled(false);
+        jTFInventarioFinal.setFocusable(false);
+
+        jTFInventarioInicial.setEditable(false);
+        jTFInventarioInicial.setEnabled(false);
+        jTFInventarioInicial.setFocusable(false);
+
         jTFPorcentaje.setEditable(false);
         jTFPorcentaje.setEnabled(false);
         jTFPorcentaje.setFocusable(false);
     }
 
     private void cargarTabla() {
-        String titulos[] = {"Periodo", "Ventas", "Produccion"};
+        String titulos[] = {"Periodo", "Ventas", "I.F", "I.I", "Produccion"};
         modeloTabla.setColumnIdentifiers(titulos);
         jTPrimeraC.setModel(modeloTabla);
     }
-    
-    private double convertirPorcentaje(double porcentaje){
-        return porcentaje / 100;
-    }
-    
-    private void primeraCarga(){
-        // Obtener las entradas de los JTextField
-        String ventasDada = jTFVentas.getText();
-        String inventarioInicialDado = jTFInventarioInicial.getText();
-        String inventarioFinalDado = jTFInventarioFinal.getText();
-        
-        try{
+
+    private void primeraCarga() {
+        try {
             // Convertir las entradas a números decimales y almacenarlas en los arrays
-            this.ventas[this.mesActual] = Integer.parseInt(ventasDada);
-            int inventarioInicial = Integer.parseInt(inventarioInicialDado);
-            int inventarioFinal = Integer.parseInt(inventarioFinalDado);
-            
+            this.porcentaje = Double.parseDouble(jTFPorcentaje.getText());
+            this.ventas[this.mesActual] = Integer.parseInt(jTFVentas.getText());
+            int inventarioInicial = Integer.parseInt(jTFInventarioInicial.getText());
+            int inventarioFinal = Integer.parseInt(jTFInventarioFinal.getText());
 
             // Calcular la producción mensual solo para el mes actual
-            determinacionProduccion.setVentas(ventas);
+            determinacionProduccion.setVentas(this.ventas);
+            determinacionProduccion.setPorcentaje(this.porcentaje);
             determinacionProduccion.setInventarioFinal(inventarioFinal);
             determinacionProduccion.setInventarioInicial(inventarioInicial);
-            
+
             this.produccionMensual = determinacionProduccion.calcularDeterminacionProduccion();
+            this.inventarioFinalE = determinacionProduccion.extraerInventarioFinal();
+            this.inventarioInicialE = determinacionProduccion.extraerInventarioInicial();
 
             // Agregar una fila a la tabla con los datos del mes actual
-            Object[] fila = {this.meses[this.mesActual], this.ventas[this.mesActual], formatoDecimal.format(produccionMensual[this.mesActual])};
+            Object[] fila = {this.meses[this.mesActual], this.ventas[this.mesActual], formatoDecimal.format(this.inventarioFinalE[this.mesActual]),
+                formatoDecimal.format(this.inventarioInicialE[this.mesActual]), formatoDecimal.format(this.produccionMensual[this.mesActual])};
 
             modeloTabla.addRow(fila);
             jTPrimeraC.setModel(modeloTabla);
 
             limpiarCampos();
             buttomsPrimeraCarga();
-            
+
             this.mesActual++;
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Ingresa datos validos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    private void segundaCarga() {
-        // Obtener las entradas de los JTextField
-        String porcentajeDato = jTFPorcentaje.getText();
-        String ventasDada = jTFVentas.getText();
 
+    private void segundaCarga() {
         try {
             // Convertir las entradas a números decimales y almacenarlas en los arrays
-            double porcen = Double.parseDouble(porcentajeDato);
-            this.ventas[this.mesActual] = Integer.parseInt(ventasDada);
-
-            this.porcentaje = convertirPorcentaje(porcen);
+            this.ventas[this.mesActual] = Integer.parseInt(jTFVentas.getText());
 
             // Calcular la producción mensual solo para el mes actual
-            determinacionProduccion.setVentas(ventas);
-            determinacionProduccion.setPorcentaje(this.porcentaje);
+            determinacionProduccion.setVentas(this.ventas);
 
             this.produccionMensual = determinacionProduccion.calcularDeterminacionProduccion();
+            this.inventarioFinalE = determinacionProduccion.extraerInventarioFinal();
+            this.inventarioInicialE = determinacionProduccion.extraerInventarioInicial();
 
             // Agregar una fila a la tabla con los datos del mes actual
-            Object[] fila = {this.meses[this.mesActual], this.ventas[this.mesActual], formatoDecimal.format(produccionMensual[this.mesActual])};
+            Object[] fila = {this.meses[this.mesActual], this.ventas[this.mesActual], formatoDecimal.format(this.inventarioFinalE[this.mesActual]),
+                formatoDecimal.format(this.inventarioInicialE[this.mesActual]), formatoDecimal.format(this.produccionMensual[this.mesActual])};
 
             modeloTabla.addRow(fila);
             jTPrimeraC.setModel(modeloTabla);
 
             limpiarCampos();
-            buttomsSegundaCarga();
 
-            this.mesActual++;
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Ingresa datos validos", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    private void terceraCarga(){
-        // Obtener las entradas de los JTextField
-        String ventasDada = jTFVentas.getText();
-        
-        try{
-            // Convertir las entradas a números decimales y almacenarlas en los arrays
-            this.ventas[this.mesActual] = Integer.parseInt(ventasDada);
-
-            // Calcular la producción mensual solo para el mes actual
-            determinacionProduccion.setVentas(ventas);
-            
-            this.produccionMensual = determinacionProduccion.calcularDeterminacionProduccion();
-
-            // Agregar una fila a la tabla con los datos del mes actual
-            Object[] fila = {this.meses[this.mesActual], this.ventas[this.mesActual], formatoDecimal.format(produccionMensual[this.mesActual])};
-
-            modeloTabla.addRow(fila);
-            jTPrimeraC.setModel(modeloTabla);
-
-            limpiarCampos();
-            
             this.mesActual++;
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Ingresa datos validos", "Error", JOptionPane.ERROR_MESSAGE);
@@ -406,6 +376,7 @@ public class JPDeterminacionDeProduccion extends javax.swing.JPanel {
         jLProduccionAnual.setText(String.valueOf(formatoDecimal.format(produccionAnual)));
 
         // Desactivar el botón después de ingresar los datos de los 12 meses y activamos el que cambiara la cedula
+        buttomsFinal();
         jBIngresar.setEnabled(false);
         jBSiguienteCedula.setEnabled(true);
     }

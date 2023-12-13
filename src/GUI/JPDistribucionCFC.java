@@ -1,4 +1,3 @@
-
 package GUI;
 
 import LogicaCedulas.DistribucionCostosFijosComunes;
@@ -8,35 +7,40 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class JPDistribucionCFC extends javax.swing.JPanel {
+
     DefaultTableModel modeloTabla = new DefaultTableModel();
     DecimalFormat formatoMoneda = new DecimalFormat("$#,##0.00");
+    DecimalFormat formatoNormal = new DecimalFormat("###0.00");
     DistribucionCostosFijosComunes distriCFC = new DistribucionCostosFijosComunes();
-    
+
+    private int[] ventas;
+    private double[] inventarioFinalE;
+    private double[] inventarioInicialE;
     private double[] produccionMensual;
     private double[] costoTotalUsoMateriales;
     private double[] costoTotalMDO;
-    
+
     private int mesActual = 0;
     private final int PORCENTAJE = 100;
     private String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
     private double porcentajeP;
     private double porcentajeV;
     private double porcentajeA;
-    private double porcentajeProd;
-    private double porcentajeVent;
-    private double porcentajeAdm;
-    private double agua;
-    private double luz;
+    private double[] agua = new double[12];
+    private double[] luz = new double[12];
     private double servicioC;
-    private double gastosG;
+    private double[] gastosG = new double[12];
     private double rentas;
     private double depreciacion;
-    private double[] totalCostoIndirectos;
-    private double[] totalCostoIndirectosProduccion;
-    private double[] totalCostoIndirectosVentas;
-    private double[] totalCostoIndirectosAdministracion;
-    
-    public JPDistribucionCFC(double[] produccionMensual, double[] costoTotalUsoMateriales, double[] costoTotalMDO) {
+    private double[] totalCostoIndirectos = new double[12];
+    private double[] totalCostoIndirectosProduccion = new double[12];
+    private double[] totalCostoIndirectosVentas = new double[12];
+    private double[] totalCostoIndirectosAdministracion = new double[12];
+
+    public JPDistribucionCFC(int[] ventas, double[] inventarioFinalE, double[] inventarioInicialE, double[] produccionMensual, double[] costoTotalUsoMateriales, double[] costoTotalMDO) {
+        this.ventas = ventas;
+        this.inventarioFinalE = inventarioFinalE;
+        this.inventarioInicialE = inventarioInicialE;
         this.produccionMensual = produccionMensual;
         this.costoTotalUsoMateriales = costoTotalUsoMateriales;
         this.costoTotalMDO = costoTotalMDO;
@@ -86,6 +90,8 @@ public class JPDistribucionCFC extends javax.swing.JPanel {
             jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 100, Short.MAX_VALUE)
         );
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jTQuintaCedula.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -162,12 +168,12 @@ public class JPDistribucionCFC extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLcalcularCostoVarablesProduccion)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLCostoTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE))
+                        .addComponent(jLCostoTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBIngresar)
                             .addComponent(jBSiguienteCedula)
                             .addComponent(jLabel1)
+                            .addComponent(jBIngresar)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -209,18 +215,17 @@ public class JPDistribucionCFC extends javax.swing.JPanel {
                                         .addComponent(jTFDepreciaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 700, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTFAgua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLaguaCFC))
@@ -255,13 +260,14 @@ public class JPDistribucionCFC extends javax.swing.JPanel {
                                 .addComponent(jLaguaCFC3)
                                 .addComponent(jTFPorcentajeA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
-                        .addComponent(jBIngresar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBSiguienteCedula)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLcalcularCostoVarablesProduccion)
-                            .addComponent(jLCostoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jBIngresar))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jBSiguienteCedula)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLcalcularCostoVarablesProduccion)
+                    .addComponent(jLCostoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -278,26 +284,26 @@ public class JPDistribucionCFC extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBSiguienteCedulaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSiguienteCedulaActionPerformed
-        JPCostosIndirectosF costosIF = new JPCostosIndirectosF(produccionMensual, costoTotalUsoMateriales, costoTotalMDO, totalCostoIndirectosProduccion, totalCostoIndirectosVentas, totalCostoIndirectosAdministracion);
-        
-        costosIF.setSize(804, 407);
+        JPCostosIndirectosF costosIF = new JPCostosIndirectosF(this.ventas, this.inventarioFinalE, this.inventarioInicialE,
+                this.produccionMensual, this.costoTotalUsoMateriales, this.costoTotalMDO, this.totalCostoIndirectosProduccion,
+                this.totalCostoIndirectosVentas, this.totalCostoIndirectosAdministracion);
+
+        costosIF.setSize(1056, 407);
         costosIF.setLocation(0, 0);
-        
+
         this.removeAll();
-        this.add(costosIF,BorderLayout.CENTER);
+        this.add(costosIF, BorderLayout.CENTER);
         this.revalidate();
         this.repaint();
     }//GEN-LAST:event_jBSiguienteCedulaActionPerformed
 
     private void jBIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBIngresarActionPerformed
-        if(this.mesActual == 0){
+        if (this.mesActual == 0) {
             primeraCarga();
         } else {
-            for (int i = 0; i < 11; i++) {
-                segundaCarga();
-                if(this.mesActual == 12){
-                    calcularTotales();
-                }
+            segundaCarga();
+            if (this.mesActual == 12) {
+                calcularTotales();
             }
         }
     }//GEN-LAST:event_jBIngresarActionPerformed
@@ -332,14 +338,40 @@ public class JPDistribucionCFC extends javax.swing.JPanel {
     private javax.swing.JTextField jTFServiciosC;
     private javax.swing.JTable jTQuintaCedula;
     // End of variables declaration//GEN-END:variables
-    
+
     private void cargarTabla() {
-        String titulos[] = {"Periodo", "Porcentaje", "Agua","Luz", "Servicios C", "Gastos Gerenciales", "Rentas", "Depreciacion", "Costo Total"};
+        String titulos[] = {"Periodo", "Porcentaje", "Agua", "Luz", "Servicios C", "Gastos Gerenciales", "Rentas", "Depreciacion", "Costo Total"};
         modeloTabla.setColumnIdentifiers(titulos);
         jTQuintaCedula.setModel(modeloTabla);
     }
+
+    private void buttomsPrimeraCarga() {
+        jTFServiciosC.setEditable(false);
+        jTFServiciosC.setEnabled(false);
+        jTFServiciosC.setFocusable(false);
+        
+        jTFRentas.setEditable(false);
+        jTFRentas.setEnabled(false);
+        jTFRentas.setFocusable(false);
+        
+        jTFDepreciaciones.setEditable(false);
+        jTFDepreciaciones.setEnabled(false);
+        jTFDepreciaciones.setFocusable(false);
+        
+        jTFPorcentajeP.setEditable(false);
+        jTFPorcentajeP.setEnabled(false);
+        jTFPorcentajeP.setFocusable(false);
+
+        jTFPorcentajeV.setEditable(false);
+        jTFPorcentajeV.setEnabled(false);
+        jTFPorcentajeV.setFocusable(false);
+
+        jTFPorcentajeA.setEditable(false);
+        jTFPorcentajeA.setEnabled(false);
+        jTFPorcentajeA.setFocusable(false);
+    }
     
-    private void buttomsPrimeraCarga(){
+    private void buttomsFinal() {
         jTFAgua.setEditable(false);
         jTFAgua.setEnabled(false);
         jTFAgua.setFocusable(false);
@@ -360,23 +392,23 @@ public class JPDistribucionCFC extends javax.swing.JPanel {
         jTFRentas.setEnabled(false);
         jTFRentas.setFocusable(false);
         
-        jTFPorcentajeP.setEditable(false);
-        jTFPorcentajeP.setEnabled(false);
-        jTFPorcentajeP.setFocusable(false);
-        
-        jTFPorcentajeV.setEditable(false);
-        jTFPorcentajeV.setEnabled(false);
-        jTFPorcentajeV.setFocusable(false);
-        
-        jTFPorcentajeA.setEditable(false);
-        jTFPorcentajeA.setEnabled(false);
-        jTFPorcentajeA.setFocusable(false);
-        
         jTFDepreciaciones.setEditable(false);
         jTFDepreciaciones.setEnabled(false);
         jTFDepreciaciones.setFocusable(false);
+        
+        jTFPorcentajeP.setEditable(false);
+        jTFPorcentajeP.setEnabled(false);
+        jTFPorcentajeP.setFocusable(false);
+
+        jTFPorcentajeV.setEditable(false);
+        jTFPorcentajeV.setEnabled(false);
+        jTFPorcentajeV.setFocusable(false);
+
+        jTFPorcentajeA.setEditable(false);
+        jTFPorcentajeA.setEnabled(false);
+        jTFPorcentajeA.setFocusable(false);
     }
-    
+
     private void limpiarCampos() {
         jTFAgua.setText("");
         jTFLuz.setText("");
@@ -384,28 +416,23 @@ public class JPDistribucionCFC extends javax.swing.JPanel {
         jTFGastosG.setText("");
         jTFRentas.setText("");
         jTFDepreciaciones.setText("");
+        jTFPorcentajeP.setText("");
+        jTFPorcentajeV.setText("");
+        jTFPorcentajeA.setText("");
     }
-    
-    private double convertirPorcentaje(double porcentaje){
-        return porcentaje / 100;
-    }
-    
-    private void primeraCarga(){
+
+    private void primeraCarga() {
         try {
-            this.agua = Double.parseDouble(jTFAgua.getText());
-            this.luz = Double.parseDouble(jTFLuz.getText());
+            this.agua[this.mesActual] = Double.parseDouble(jTFAgua.getText());
+            this.luz[this.mesActual] = Double.parseDouble(jTFLuz.getText());
             this.servicioC = Double.parseDouble(jTFServiciosC.getText());
-            this.gastosG = Double.parseDouble(jTFGastosG.getText());
+            this.gastosG[this.mesActual] = Double.parseDouble(jTFGastosG.getText());
             this.rentas = Double.parseDouble(jTFRentas.getText());
             this.depreciacion = Double.parseDouble(jTFDepreciaciones.getText());
-            this.porcentajeProd = Double.parseDouble(jTFPorcentajeP.getText());
-            this.porcentajeVent = Double.parseDouble(jTFPorcentajeV.getText());
-            this.porcentajeAdm = Double.parseDouble(jTFPorcentajeA.getText());
-            
-            this.porcentajeP = convertirPorcentaje(this.porcentajeProd);
-            this.porcentajeV = convertirPorcentaje(this.porcentajeVent);
-            this.porcentajeA = convertirPorcentaje(this.porcentajeAdm);
-            
+            this.porcentajeP = Double.parseDouble(jTFPorcentajeP.getText());
+            this.porcentajeV = Double.parseDouble(jTFPorcentajeV.getText());
+            this.porcentajeA = Double.parseDouble(jTFPorcentajeA.getText());
+
             distriCFC.setPorcentajeProduccion(this.porcentajeP);
             distriCFC.setPorcentajeVentas(this.porcentajeV);
             distriCFC.setPorcentajeAdministracion(this.porcentajeA);
@@ -414,15 +441,15 @@ public class JPDistribucionCFC extends javax.swing.JPanel {
             distriCFC.setServiciosComunicacion(this.servicioC);
             distriCFC.setGastosGerenciales(this.gastosG);
             distriCFC.setRentas(this.rentas);
-            distriCFC.setDepreciaciones(depreciacion);
+            distriCFC.setDepreciaciones(this.depreciacion);
 
             this.totalCostoIndirectos = distriCFC.calularCostoTotalCostosIndirectos();
             this.totalCostoIndirectosProduccion = distriCFC.calcularCostoFijosComunesProduccion();
             this.totalCostoIndirectosVentas = distriCFC.calcularCostoFijosComunesVentas();
             this.totalCostoIndirectosAdministracion = distriCFC.calcularCostoFijosComunesAdministracion();
 
-            Object[] fila = {this.meses[this.mesActual], this.PORCENTAJE, formatoMoneda.format(this.agua), formatoMoneda.format(this.luz), 
-                formatoMoneda.format(this.servicioC), formatoMoneda.format(this.gastosG), formatoMoneda.format(this.rentas), 
+            Object[] fila = {this.meses[this.mesActual], this.PORCENTAJE, formatoMoneda.format(this.agua[this.mesActual]), formatoMoneda.format(this.luz[this.mesActual]),
+                formatoMoneda.format(this.servicioC), formatoMoneda.format(this.gastosG[this.mesActual]), formatoMoneda.format(this.rentas),
                 formatoMoneda.format(this.depreciacion), formatoMoneda.format(this.totalCostoIndirectos[this.mesActual])};
 
             modeloTabla.addRow(fila);
@@ -430,51 +457,52 @@ public class JPDistribucionCFC extends javax.swing.JPanel {
 
             limpiarCampos();
             buttomsPrimeraCarga();
-            
+
             this.mesActual++;
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Ingresa datos validos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    private void segundaCarga(){
+
+    private void segundaCarga() {
         try {
-            distriCFC.setPorcentajeProduccion(this.porcentajeP);
-            distriCFC.setPorcentajeVentas(this.porcentajeV);
-            distriCFC.setPorcentajeAdministracion(this.porcentajeA);
+            this.agua[this.mesActual] = Double.parseDouble(jTFAgua.getText());
+            this.luz[this.mesActual] = Double.parseDouble(jTFLuz.getText());
+            this.gastosG[this.mesActual] = Double.parseDouble(jTFGastosG.getText());
+
             distriCFC.setAgua(this.agua);
             distriCFC.setEnergiaElectrica(this.luz);
-            distriCFC.setServiciosComunicacion(this.servicioC);
             distriCFC.setGastosGerenciales(this.gastosG);
-            distriCFC.setRentas(this.rentas);
-            distriCFC.setDepreciaciones(depreciacion);
 
             this.totalCostoIndirectos = distriCFC.calularCostoTotalCostosIndirectos();
             this.totalCostoIndirectosProduccion = distriCFC.calcularCostoFijosComunesProduccion();
             this.totalCostoIndirectosVentas = distriCFC.calcularCostoFijosComunesVentas();
             this.totalCostoIndirectosAdministracion = distriCFC.calcularCostoFijosComunesAdministracion();
 
-            Object[] fila = {this.meses[this.mesActual], this.PORCENTAJE, formatoMoneda.format(this.agua), formatoMoneda.format(this.luz), 
-                formatoMoneda.format(this.servicioC), formatoMoneda.format(this.gastosG), formatoMoneda.format(this.rentas), 
+            Object[] fila = {this.meses[this.mesActual], this.PORCENTAJE, formatoMoneda.format(this.agua[this.mesActual]), formatoMoneda.format(this.luz[this.mesActual]),
+                formatoMoneda.format(this.servicioC), formatoMoneda.format(this.gastosG[this.mesActual]), formatoMoneda.format(this.rentas),
                 formatoMoneda.format(this.depreciacion), formatoMoneda.format(this.totalCostoIndirectos[this.mesActual])};
 
             modeloTabla.addRow(fila);
             jTQuintaCedula.setModel(modeloTabla);
-            
+
+            limpiarCampos();
+
             this.mesActual++;
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Ingresa datos validos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    private void calcularTotales(){
+
+    private void calcularTotales() {
         JOptionPane.showMessageDialog(null, "Calculando totales", "Info", JOptionPane.INFORMATION_MESSAGE);
-        
+
         double totalCostoTotal = distriCFC.calcularCostoAnualCostosIndirectos();
 
         // Muestreo de valores
         jLCostoTotal.setText(String.valueOf(formatoMoneda.format(totalCostoTotal)));
-        
+
+        buttomsFinal();
         jBIngresar.setEnabled(false);
         jBSiguienteCedula.setEnabled(true);
     }

@@ -1,6 +1,7 @@
 package LogicaCedulas;
 
 public class MaterialesComprar {
+
     private final int mesesA = 12;
     private double porcentaje;
     private double[] unidadesProducir;
@@ -11,16 +12,8 @@ public class MaterialesComprar {
     public MaterialesComprar() {
     }
 
-    public MaterialesComprar(double porcentaje, double[] unidadesProducir, int materialesUsar, int inventarioFinal, double costoUnitario) {
-        this.porcentaje = porcentaje;
-        this.unidadesProducir = unidadesProducir;
-        this.materialesUsar = materialesUsar;
-        this.inventarioFinal = inventarioFinal;
-        this.costoUnitario = costoUnitario;
-    }
-
     public void setPorcentaje(double porcentaje) {
-        this.porcentaje = porcentaje;
+        this.porcentaje = porcentaje / 100;
     }
 
     public void setUnidadesProducir(double[] unidadesProducir) {
@@ -39,8 +32,6 @@ public class MaterialesComprar {
         this.costoUnitario = costoUnitario;
     }
 
-    
-
     public double[] calcularUnidadesRequeridas() {
         double[] unidadesRequeridasCalculadas = new double[this.mesesA];
 
@@ -49,17 +40,17 @@ public class MaterialesComprar {
         }
         return unidadesRequeridasCalculadas;
     }
-    
-    public double calcularTotalUnidadesRequeridas(){
+
+    public double calcularTotalUnidadesRequeridas() {
         double[] unidadesRequeridasCalculadas = calcularUnidadesRequeridas();
         double totalUnidadesRequeridas = 0;
-        
+
         for (double unidadesR : unidadesRequeridasCalculadas) {
             totalUnidadesRequeridas += unidadesR;
         }
         return totalUnidadesRequeridas;
     }
-    
+
     public double[] calcularUnidadesComprar() {
         double[] unidadesComprarCalculadas = new double[this.mesesA];
         double[] unidadesRequeridasCalculadas = calcularUnidadesRequeridas();
@@ -78,31 +69,31 @@ public class MaterialesComprar {
         }
         return unidadesComprarCalculadas;
     }
-    
-    public double calcularTotalUnidadesComprar(){
+
+    public double calcularTotalUnidadesComprar() {
         double[] unidadesComprarCalculadas = calcularUnidadesComprar();
         int totalUnidadesComprar = 0;
-        
+
         for (double unidadesC : unidadesComprarCalculadas) {
             totalUnidadesComprar += unidadesC;
         }
         return totalUnidadesComprar;
     }
-    
-    public double[] calcularImporte(){
+
+    public double[] calcularImporte() {
         double[] importeCalculado = new double[this.mesesA];
         double[] unidadesComprarCalculadas = calcularUnidadesComprar();
-        
+
         for (int i = 0; i < this.mesesA; i++) {
-            importeCalculado[i] =  unidadesComprarCalculadas[i] * this.costoUnitario;
+            importeCalculado[i] = unidadesComprarCalculadas[i] * this.costoUnitario;
         }
         return importeCalculado;
     }
-    
-    public double calcularTotalImporte(){
+
+    public double calcularTotalImporte() {
         double[] importeCalculado = calcularImporte();
         double totalImporte = 0;
-        
+
         for (double importe : importeCalculado) {
             totalImporte += importe;
         }
